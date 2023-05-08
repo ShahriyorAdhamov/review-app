@@ -43,24 +43,24 @@ const Register = () => {
           <div className = ' register-inputs d-flex flex-column m-auto'>
             <input 
               type = "text"
-              className='form-control border border-primary mb-2'
+              className='w-50 mx-auto form-control border border-primary mb-2'
               placeholder="никнейм"
               value={username}
               onChange={e => setUsername(e.target.value)}/>
               
             <input 
               type = "email" 
-              className='form-control border-primary mb-2' 
+              className='w-50 mx-auto form-control border-primary mb-2' 
               placeholder="email"
               value={email}
               onChange={e => setEmail(e.target.value)}/>
             <input 
               type = "password" 
-              className='form-control border-primary mb-2'  
+              className='w-50 mx-auto form-control border-primary mb-2'  
               placeholder="пароль"
               value={password}
               onChange={e => setPassword(e.target.value)}/> 
-            <button type = "submit" className='btn btn-primary mb-2' disabled = {isLoading}  onClick={registerFunc}>
+            <button type = "submit" className='w-50 mx-auto btn btn-primary mb-2' disabled = {isLoading}  onClick={registerFunc}>
               register
             </button>
           </div>

@@ -5,11 +5,14 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getArticlesFail, getArticlesLoading, getArticlesSuccess } from "../slice/article";
 import { useNavigate } from "react-router-dom";
+import Search from "./search";
 
 function Main() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {isLoading, articles} = useSelector(state => state.article);
+  const {searchTxt} = useSelector(state => state.search)
+  const {user, isLogin} = useSelector(state => state.auth)
 
     const getArticles = async () => {
       dispatch(getArticlesLoading());
@@ -21,16 +24,39 @@ function Main() {
       }
     }
 
+    const deleteArticle = async (slug) => {
+      try {
+        await ArticleService.deleteArticle(slug)
+        getArticles();
+      }catch(error) {
+        console.log(error)
+      }
+    }
+
     useEffect(() => {
       getArticles();
     },[])
+
+    let filteredData = articles;
+    if(searchTxt){
+
+        const searchFilter = (searchTxt, articles) =>         articles.filter(item => item.title.toLowerCase().indexOf(searchTxt) > -1 );
+  
+        filteredData = searchFilter(searchTxt, articles);
+    }
+
+
+    
+
+
     return (
       <div>
+        <Search/>
         <div className="album py-5 bg-light">
       <div className="container">
 
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {articles.map(
+        {filteredData.map(
           item =>(
           <div className="col" key={item.id}>
             <div className="card shadow-sm h-100">
@@ -42,8 +68,12 @@ function Main() {
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="btn-group">
                     <button type="button" className="btn btn-sm btn-outline-success" onClick={() => navigate(`article/${item.slug}`)}>View</button>
-                    <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                    <button type="button" className="btn btn-sm btn-outline-danger">Delete</button>
+                    {isLogin && (user.username == item.author.username) && (
+                      <>
+                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => navigate(`article/${item.slug}`)}>Edit</button>
+                        <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => deleteArticle(item.slug)}>Delete</button>
+                      </>
+                    )}
                   </div>
                   <small className="text-muted text-capitalize">{item.author.username}</small>
                 </div>
