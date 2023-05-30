@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { getArticlesFail, getArticlesLoading, getArticlesSuccess } from "../slice/article";
 import { useNavigate } from "react-router-dom";
 import Search from "./search";
+import AuthService from "../services/auth";
 
 function Main() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function Main() {
     }
 
     useEffect(() => {
-      getArticles();
+       getArticles();
     },[])
 
     let filteredData = articles;
@@ -45,14 +46,10 @@ function Main() {
         filteredData = searchFilter(searchTxt, articles);
     }
 
-
-    
-
-
     return (
-      <div>
+      <div className="">
         <Search/>
-        <div className="album py-5 bg-light">
+        <div className="album py-5 ">
       <div className="container">
 
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -62,7 +59,7 @@ function Main() {
             <div className="card shadow-sm h-100">
               <svg className="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em"></text></svg>
 
-              <div className="card-body">
+              <div className="card-body cardBodyBg">
                 <p className="card-text fw-bold">{item.title}</p>
                 <p className="card-text">{item.description}</p>
                 <div className="d-flex justify-content-between align-items-center">
@@ -70,7 +67,7 @@ function Main() {
                     <button type="button" className="btn btn-sm btn-outline-success" onClick={() => navigate(`article/${item.slug}`)}>View</button>
                     {isLogin && (user.username == item.author.username) && (
                       <>
-                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => navigate(`article/${item.slug}`)}>Edit</button>
+                        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => navigate(`edit-article/${item.slug}`)}>Edit</button>
                         <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => deleteArticle(item.slug)}>Delete</button>
                       </>
                     )}

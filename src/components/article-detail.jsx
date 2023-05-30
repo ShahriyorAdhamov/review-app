@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ArticleService from '../services/articles';
 import { getArticleDetailFail, getArticleDetailLoading, getArticleDetailSuccess } from '../slice/article';
 
-function ArticleDetail() {
+const ArticleDetail = () => {
   const {id} = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {ArticleDetail} = useSelector(state => state.article);
-
+  const {articleDetailParams} = useSelector(state => state.article);
+ 
 
   const getArticleDetail = async () => {
     dispatch(getArticleDetailLoading());
@@ -25,8 +26,16 @@ function ArticleDetail() {
   },[id])
 
   return (
-    <div>
-      <h1>{id}</h1>
+    <div className='d-flex justify-content-between container mx-auto'>
+      {articleDetailParams? 
+      <div>
+        <h2>{articleDetailParams.title}</h2>
+        <p>{articleDetailParams.description}</p>
+
+      </div>
+      :
+      ''
+      }
     </div>
   )
 }

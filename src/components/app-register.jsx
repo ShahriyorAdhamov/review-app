@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {signUserFail,signUserSuccess, signUserLoading} from '../slice/auth'
+import {signUserFail,signUserSuccess, signUserLoading, getPassword} from '../slice/auth'
 import AuthService from '../services/auth'
 import {ValidationError} from './validationError'
 import {useNavigate} from 'react-router-dom'
@@ -10,7 +10,7 @@ const Register = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const dispatch = useDispatch()
-	const {loggedIn, isLoading} = useSelector(state => state.auth)
+	const {isLogin, isLoading} = useSelector(state => state.auth)
 	const navigate = useNavigate()
 
 	const registerFunc = async e => {
@@ -19,26 +19,28 @@ const Register = () => {
 		const user = {username, email, password}
 		try {
 			const response = await AuthService.userRegister(user)
+      console.log(response)
 			dispatch(signUserSuccess(response.user))
 			navigate('/')
 		} catch (error) {
       dispatch(signUserFail(error.response.data.errors))
 		}
 
+
 	}
 
 	useEffect(() => {
-		if (loggedIn) {
+		if (isLogin) {
 			navigate('/')
 		}
-	}, [loggedIn])
+	}, [isLogin])
 
 
 
     return (
       <div className = "Register mt-5">
         <h2 className='mb-4'>Register</h2>
-        {/* <ValidationError/> */}
+        <ValidationError/>
         <form action="" >
           <div className = ' register-inputs d-flex flex-column m-auto'>
             <input 

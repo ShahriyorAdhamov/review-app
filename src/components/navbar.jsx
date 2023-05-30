@@ -2,16 +2,16 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Link, useNavigate} from 'react-router-dom'
 import { userLogout} from '../slice/auth'
 
+import ThemeButton from '../ui/theme-button'
+
 const Navbar = () => {
 	const {isLogin, user} = useSelector(state => state.auth)
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
+	
+	const btnInfo = document.querySelector('.user__info__button')
 
-	const logoutHandler = () => {
-		dispatch(userLogout());
-		localStorage.removeItem('token');
-		navigate('/login');
-	}
+
 
 	return (
 		<div className='d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom container pt-3'>
@@ -20,22 +20,31 @@ const Navbar = () => {
 			</Link>
 
 			<nav className='d-inline-flex mt-2 mt-md-0 ms-md-auto'>
+				<ThemeButton/>
 				{isLogin? (
 					<>
-						<p className='me-3 py-2 m-0 text-dark text-decoration-none'>{user.username}</p>
-						<Link className='me-3 py-2 text-dark text-decoration-none' to={'/create-article'}>
+						<Link className='me-3 py-2  text-decoration-none' to={'/create-article'}>
 							create article
 						</Link>
-						<button className='btn btn-outline-danger' onClick={logoutHandler}>
-							Logout
-						</button>
+						<Link to={'/user-settings'}>
+							<button className='user__info__button'>
+								user
+							</button>
+						</Link>
+						<p className='me-3 py-2 m-0  text-decoration-none'>{user.username}</p>
+						<div>
+							{/* <button className='btn btn-outline-danger' onClick={logoutHandler}>
+								Logout
+							</button> */}
+						</div>
+						
 					</>
 				) : (
 					<>
-						<Link className='me-3 py-2 text-dark text-decoration-none' to={'/login'}>
+						<Link className='me-3 py-2  text-decoration-none' to={'/login'}>
 							Login
 						</Link>
-						<Link className='me-3 py-2 text-dark text-decoration-none' to={'/register'}>
+						<Link className='me-3 py-2  text-decoration-none' to={'/register'}>
 							Register
 						</Link>
 					</>

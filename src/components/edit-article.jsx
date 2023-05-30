@@ -1,32 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import ArticleService from '../services/articles';
-import { postArticleFail, postArticleLoading, postArticleSuccess } from '../slice/article';
-import {useSelector, useDispatch} from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { getArticleDetailFail, getArticleDetailLoading, getArticleDetailSuccess } from '../slice/article';
+import { postArticleFail, postArticleLoading, postArticleSuccess } from '../slice/article';
 
-function EditArticle(e) {
+const EditArticle = e => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {id} = useParams();
 
-  // e.preventDefault();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [body, setBody] = useState('');
 
-  function  submitArticle() {
-    const data = {title, description, body};
-    dispatch(postArticleLoading)
-    try{
-      dispatch(postArticleSuccess)
-      const response = ArticleService.postArticle(data);
-      navigate('/')
+
+  
+  const getArticleDetail = async () => {
+    dispatch(getArticleDetailLoading());
+    try {
+      const response = await ArticleService.getArticleDetail(id);
+      setTitle(response.article.title)
+      setBody(response.article.body);
+      setDescription(response.article.description);
+      dispatch(getArticleDetailSuccess(response.article))
     } catch(error) {
-      dispatch(postArticleFail)
-      console.log(error)
+      dispatch(getArticleDetailFail(error));
     }
-    
   }
 
+  useEffect(() => {
+    getArticleDetail();
+  },[id])
+
+  const submitArticle = async (e) => {
+    e.preventDefault();
+    const data = {title, description, body};
+    dispatch(postArticleLoading());
+    try{
+
+      await ArticleService.editArticle(id, data);
+      dispatch(postArticleSuccess())
+      getArticleDetail();
+      navigate('/');
+    } catch(error) {
+      dispatch(postArticleFail());
+    }}
 
   return (
     <div>
@@ -51,8 +71,8 @@ function EditArticle(e) {
               placeholder="body"
               value={body}
               onChange={e => setBody(e.target.value)}/>
-          <button type = "submit" className='mx-auto w-75 btn btn-primary mb-2' onClick={() => submitArticle()}>
-              Create
+          <button type = "submit" className='mx-auto w-75 btn btn-primary mb-2' onClick={submitArticle}>
+              Edit
           </button>
       </form>
     </div>

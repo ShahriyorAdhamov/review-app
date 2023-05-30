@@ -1,10 +1,10 @@
 import React from 'react'
 import {useState} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import { searchTxtContainer } from '../slice/search';
 
 
-function Search() {
+const Search = () => {
 
     const dispatch = useDispatch()
     const [searchTxt,setSearchTxt] = useState('');
@@ -17,9 +17,6 @@ function Search() {
             <input type="text" placeholder='Search' 
             className='w-50 border-secondary mb-2' 
             onChange={e => setSearchTxt(e.target.value)} value={searchTxt}/>
-            <ul className="autocomplete">
-                <li className="autocomplete__item"></li>
-            </ul>
         </>
     )
 }

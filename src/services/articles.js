@@ -1,3 +1,4 @@
+
 import axios from "./api"
 
 const ArticleService = {
@@ -12,9 +13,14 @@ const ArticleService = {
     async postArticle(article) {
         const {data} = await axios.post('/articles', {article})
         return data;
+        
     },
     async deleteArticle(id) {
         const {data} = await axios.delete(`/articles/${id}`);
+        return data;
+    },
+    async editArticle(id, article) {
+        const {data} = await axios.put(`/articles/${id}`, {article});
         return data;
     }
 }

@@ -1,27 +1,28 @@
 import React, { useState } from 'react'
 import ArticleService from '../services/articles';
 import { postArticleFail, postArticleLoading, postArticleSuccess } from '../slice/article';
-import {useSelector, useDispatch} from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
-function CreateArticle(e) {
+const CreateArticle = e => {
+  // e.preventDefault();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // e.preventDefault();
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [body, setBody] = useState('');
 
   function  submitArticle() {
-    const data = {title, description, body};
-    dispatch(postArticleLoading)
+    const article = {title, description, body};
+    dispatch(postArticleLoading())
     try{
-      dispatch(postArticleSuccess)
-      const response = ArticleService.postArticle(data);
+      dispatch(postArticleSuccess())
+      const response = ArticleService.postArticle(article);
       navigate('/')
     } catch(error) {
-      dispatch(postArticleFail)
+      dispatch(postArticleFail())
       console.log(error)
     }
     

@@ -5,19 +5,18 @@ import Main from './components/app-main'
 import Navbar from './components/navbar';
 
 import './App.css';
-import { authSlice, signUserSuccess } from './slice/auth';
 import AuthService from './services/auth';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import ArticleService from './services/articles';
-import { getArticlesLoading, getArticlesSuccess,getArticlesFail } from './slice/article';
+import { useDispatch, useSelector } from 'react-redux';
 import ArticleDetail from './components/article-detail';
 import CreateArticle from './components/create-article';
-import Search from './components/search';
 import EditArticle from './components/edit-article';
+import { signUserSuccess } from './slice/auth';
+import UserSettings from './components/user-settings';
 
 function App() {
   const dispatch = useDispatch()
+  const {theme} = useSelector(state => state.theme)
   const getUser = async () => {
     try {
       const response = await AuthService.getUser()
@@ -34,9 +33,9 @@ function App() {
     }
   },[])
 
-
+  const classNames = 'text-center vh-100 ' + theme
   return (
-    <div className="App">
+    <div className= {classNames} >
       <Navbar/>
       <Routes>
         <Route path='/' element={<Main/>}/>
@@ -44,8 +43,9 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path = '/create-article' element={<CreateArticle/>}/>
         <Route path='article/:id' element={<ArticleDetail/>}/>
-        <Route path='article/:id' element={<EditArticle/>}/>
-      </Routes>
+        <Route path='edit-article/:id' element={<EditArticle/>}/>
+        <Route path='user-settings' element={<UserSettings/>}/>
+      </Routes> 
     </div>
   );
 }

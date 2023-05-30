@@ -1,0 +1,10 @@
+
+.night__theme {
+    background-color: rgba(44, 3, 3, 0.167);
+    color:  rgba(44, 3, 3, 0.332);
+}
+
+.light__theme {
+    background-color: #fff;
+    color: black;
+}
